@@ -297,6 +297,22 @@ export function RailRow(props: {
               >
                 <Icon name="eye" />
               </button>
+              <Show when={!props.file.artifactId && props.workspace.onOpenInApp}>
+                {(openInApp) => (
+                  <button
+                    class="workspace-desktop__action"
+                    type="button"
+                    aria-label={t("chat.workspaceFiles.open")}
+                    title={t("chat.workspaceFiles.open")}
+                    ref={nativeListener("click", (event) => {
+                      event.stopPropagation();
+                      openInApp()(props.file.path);
+                    })}
+                  >
+                    <Icon name="externalLink" />
+                  </button>
+                )}
+              </Show>
               <Show when={!props.file.artifactId}>
                 <Show when={props.workspace.onDownloadFile}>
                   {(download) => (

@@ -463,6 +463,8 @@ const catalog = {
       artifactCount: "{count} artifacts",
       actions: "Workspace file actions",
       preview: "Preview",
+      open: "Open",
+      openFailed: "Couldn’t open the file in the default app.",
       copyPath: registerChatSessionEnglish.catalog.chat.workspaceFiles.copyPath,
     },
   },

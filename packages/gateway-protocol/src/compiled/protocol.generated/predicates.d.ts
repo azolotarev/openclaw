@@ -1903,6 +1903,11 @@ export function isSessionsFilesRevealParams(
 ): value is import("typebox").Static<
   typeof import("../../schema-modules.js").SessionsFilesRevealParamsSchema
 >;
+export function isSessionsFilesOpenParams(
+  value: unknown,
+): value is import("typebox").Static<
+  typeof import("../../schema-modules.js").SessionsFilesOpenParamsSchema
+>;
 export function isSessionsDiffParams(
   value: unknown,
 ): value is import("typebox").Static<

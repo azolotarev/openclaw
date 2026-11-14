@@ -24,6 +24,7 @@ export {
   isSessionsFilesAssetsParams,
   isSessionsFilesSetParams,
   isSessionsFilesRevealParams,
+  isSessionsFilesOpenParams,
   isSessionsDiffParams,
   isSessionsCompanionAskParams,
   isSessionsCompanionStateParams,

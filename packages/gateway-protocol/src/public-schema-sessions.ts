@@ -57,6 +57,8 @@ export {
   SessionsFilesListResultSchema,
   SessionsFilesRevealParamsSchema,
   SessionsFilesRevealResultSchema,
+  SessionsFilesOpenParamsSchema,
+  SessionsFilesOpenResultSchema,
   SessionDiffCommitSchema,
   SessionDiffFileSchema,
   SessionDiffFileStatusSchema,

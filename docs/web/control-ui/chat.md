@@ -524,6 +524,19 @@ from the document's folder. For example, a report in `reports/review.md` can ope
 This also works for extensionless files such as `../LICENSE` and in
 repository-backed workspaces that do not expose a Gateway filesystem path.
 Files that exceed the inline preview limit retain their metadata and download action.
+
+Each file row in the Files panel also offers **Open**, which hands the file to the
+Gateway host instead of the in-browser preview. It is an edit/view handoff, never an
+execute action: inert documents (Markdown, text, PDF, images, office, data formats)
+open in the OS default application, while source/code files open in an explicitly
+configured editor so an OS association that points at a terminal or interpreter
+cannot run them. Executables and shell/terminal scripts are always refused, and the
+file must stay inside the session's workspace root. Remote, exec-node, and headless
+sessions receive a clear refusal. Configure the policy under
+`gateway.controlUi.fileOpen`: `editor` (application used for source files, e.g.
+"Sublime Text"), `allow` (extra extensions admitted to the default-app path), and
+`deny` (extensions always refused). Without `editor`, source files are refused with
+guidance rather than launched through an arbitrary association.
 The link opens the file without selecting a Markdown heading. Fragment-only links, external URLs, and
 conversation links retain their existing behavior. File access still uses the
 source session's current permissions. If the document's workspace has changed,

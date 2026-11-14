@@ -39,6 +39,7 @@ type SessionWorkspaceOptionalKey =
   | "onNavigationScroll"
   | "connectionEpoch"
   | "onDownloadFile"
+  | "onOpenInApp"
   | "onFindWorkspaceFile"
   | "onOpenDiff";
 export type SessionWorkspaceProps = Omit<SessionWorkspaceView, SessionWorkspaceOptionalKey> &

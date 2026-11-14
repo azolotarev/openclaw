@@ -11,6 +11,7 @@ import { patchSettings } from "../../../app/settings.ts";
 import { t } from "../../../i18n/index.ts";
 import { registerChatSessionEnglish } from "../../../i18n/locales/en-chat-session.ts";
 import { registerFilePreviewEnglish } from "../../../i18n/locales/en-file-preview.ts";
+import { formatUiError } from "../../../lib/format-error.ts";
 import { pathDisplayName } from "../../../lib/path-display.ts";
 import { resolveSessionDisplayName } from "../../../lib/session-display.ts";
 import { parseAgentSessionKey } from "../../../lib/sessions/session-key.ts";
@@ -480,6 +481,29 @@ export function createSessionWorkspaceProps(
           signal,
         ),
       ),
+    onOpenInApp: (path: string) => {
+      const client = state.client;
+      if (!client || !state.connected) {
+        return;
+      }
+      void client
+        .request<{ ok: boolean; error?: string }>("sessions.files.open", {
+          sessionKey: workspace.sessionKey,
+          ...(workspace.agentId ? { agentId: workspace.agentId } : {}),
+          path,
+        })
+        .then((result) => {
+          if (!result.ok) {
+            showToast({
+              severity: "error",
+              message: result.error ?? t("chat.workspaceFiles.openFailed"),
+            });
+          }
+        })
+        .catch((error: unknown) => {
+          showToast({ severity: "error", message: formatUiError(error) });
+        });
+    },
     onSetFilter: (filter: SessionWorkspaceFilter) => {
       workspace.filter = filter;
       // Activity reveals default results; refresh and All preserve manual disclosure.

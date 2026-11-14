@@ -193,6 +193,17 @@ export const SessionsFilesRevealResultSchema = closedObject({
   error: Type.Optional(NonEmptyString),
 });
 
+/** Opens one session file on the Gateway host in the default app or configured editor. */
+export const SessionsFilesOpenParamsSchema = closedObject({
+  ...sessionFilePathProperties,
+});
+
+export const SessionsFilesOpenResultSchema = closedObject({
+  ok: Type.Boolean(),
+  path: Type.Optional(NonEmptyString),
+  error: Type.Optional(NonEmptyString),
+});
+
 export type SessionFileContentEncoding = Static<typeof SessionFileContentEncodingSchema>;
 export type SessionFileKind = Static<typeof SessionFileKindSchema>;
 export type SessionFilePreviewKind = Static<typeof SessionFilePreviewKindSchema>;
@@ -220,3 +231,5 @@ export type SessionsFilesSetParams = Static<typeof SessionsFilesSetParamsSchema>
 export type SessionsFilesSetResult = Static<typeof SessionsFilesSetResultSchema>;
 export type SessionsFilesRevealParams = Static<typeof SessionsFilesRevealParamsSchema>;
 export type SessionsFilesRevealResult = Static<typeof SessionsFilesRevealResultSchema>;
+export type SessionsFilesOpenParams = Static<typeof SessionsFilesOpenParamsSchema>;
+export type SessionsFilesOpenResult = Static<typeof SessionsFilesOpenResultSchema>;

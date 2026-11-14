@@ -34,6 +34,31 @@ export function resolveOpenPathCommand(
   };
 }
 
+/** Launch a specific application with a file argument (explicit editor handoff). */
+export function resolveOpenWithAppCommand(
+  app: string,
+  targetPath: string,
+  platform: NodeJS.Platform = process.platform,
+): OpenPathCommand {
+  if (platform === "darwin") {
+    return { command: "open", args: ["-a", app, targetPath] };
+  }
+  if (platform === "win32") {
+    // Keep the app and path as data, not code, inside the PowerShell literal.
+    return {
+      command: "powershell.exe",
+      args: [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `Start-Process -FilePath '${app.replaceAll("'", "''")}' -ArgumentList '${targetPath.replaceAll("'", "''")}'`,
+      ],
+    };
+  }
+  // On Linux the editor is invoked directly as a binary with the file argument.
+  return { command: app, args: [targetPath] };
+}
+
 async function observeXdgOpenStartup(command: OpenPathCommand): Promise<void> {
   // xdg-open can synchronously own a foreground application. Observe startup
   // failures without making the Gateway own the launched application's lifetime.

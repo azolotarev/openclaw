@@ -239,6 +239,21 @@ export const GatewayConfigSchema = z
           .optional(),
         /** Optional filesystem root for Control UI assets (defaults to dist/control-ui). */
         root: z.string().optional(),
+        /**
+         * Policy for the browser Control UI "Open" file action (edit/view handoff).
+         * Documents open via the OS default app; source files open via `editor`;
+         * executables/scripts are always refused.
+         */
+        fileOpen: z
+          .strictObject({
+            /** Editor application for source/code files (e.g. "Sublime Text"). */
+            editor: z.string().trim().min(1).max(120).optional(),
+            /** Extra extensions admitted to the OS default-app path. */
+            allow: z.array(z.string().trim().min(1).max(32)).max(64).optional(),
+            /** Extensions always refused (overrides allow). */
+            deny: z.array(z.string().trim().min(1).max(32)).max(64).optional(),
+          })
+          .optional(),
         /** Optional visual label and named color distinguishing this Gateway environment. */
         environment: z
           .strictObject({

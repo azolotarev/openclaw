@@ -254,6 +254,49 @@ describe("sessions.files RPC handlers", () => {
     });
   });
 
+  it("opens a document via the OS default app", async () => {
+    writeWorkspace("notes.md", "# Hi\n");
+    const payload = await files.ok("open", "notes.md");
+    expect(payload).toMatchObject({ ok: true, path: workspacePath("notes.md") });
+    expect(hoisted.execOpenPath).toHaveBeenCalledWith(
+      expect.objectContaining({ command: expect.any(String), args: [workspacePath("notes.md")] }),
+    );
+  });
+
+  it("refuses to open a path outside the session workspace", async () => {
+    const payload = await files.ok("open", { path: outsideFile() });
+    expect(payload).toMatchObject({ ok: false, error: expect.stringContaining("outside") });
+    expect(hoisted.execOpenPath).not.toHaveBeenCalled();
+  });
+
+  it("refuses shell scripts and executables", async () => {
+    writeWorkspace("run.sh", "echo hi\n");
+    const payload = await files.ok("open", "run.sh");
+    expect(payload).toMatchObject({ ok: false });
+    expect(hoisted.execOpenPath).not.toHaveBeenCalled();
+  });
+
+  it("routes source files to the configured editor", async () => {
+    writeWorkspace("script.py", "print(1)\n");
+    const payload = await files.ok("open", "script.py", {
+      getRuntimeConfig: () => ({
+        agents: { entries: { main: {} } },
+        gateway: { controlUi: { fileOpen: { editor: "Sublime Text" } } },
+      }),
+    });
+    expect(payload).toMatchObject({ ok: true });
+    expect(hoisted.execOpenPath).toHaveBeenCalledWith(
+      expect.objectContaining({ args: ["-a", "Sublime Text", workspacePath("script.py")] }),
+    );
+  });
+
+  it("refuses source files when no editor is configured", async () => {
+    writeWorkspace("script.py", "print(1)\n");
+    const payload = await files.ok("open", "script.py");
+    expect(payload).toMatchObject({ ok: false, error: expect.stringContaining("editor") });
+    expect(hoisted.execOpenPath).not.toHaveBeenCalled();
+  });
+
   it("prefers the spawned workspace root over a nested spawned cwd", async () => {
     writeWorkspace("packages/app/src/readme.md", "# Nested read me\n");
     writeWorkspace("packages/shared/config.ts", "export const shared = true;\n");

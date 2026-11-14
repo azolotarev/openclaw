@@ -115,6 +115,10 @@ export const validateSessionsFilesRevealParams = createProtocolValidator(
   S.SessionsFilesRevealParamsSchema,
   Checks.isSessionsFilesRevealParams,
 );
+export const validateSessionsFilesOpenParams = createProtocolValidator(
+  S.SessionsFilesOpenParamsSchema,
+  Checks.isSessionsFilesOpenParams,
+);
 export const validateSessionsDiffParams = createProtocolValidator(
   S.SessionsDiffParamsSchema,
   Checks.isSessionsDiffParams,

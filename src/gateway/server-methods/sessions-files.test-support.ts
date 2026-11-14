@@ -21,7 +21,8 @@ type SessionFilesOperation =
   | "preview"
   | "preview.release"
   | "set"
-  | "reveal";
+  | "reveal"
+  | "open";
 type SessionFilesMethod = `sessions.files.${SessionFilesOperation}`;
 
 type ResponderCall = { ok: boolean; payload?: unknown; error?: unknown };
